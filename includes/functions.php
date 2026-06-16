@@ -134,7 +134,8 @@ function day_slots(int $doctorId, string $date): array {
     }
 
     // mark booked (pending/confirmed hold the slot) instead of removing it
-    $st = db()->prepare("SELECT starts_at FROM appointments WHERE doctor_id = ? AND date(starts_at) = ? AND status IN ('pending','confirmed')");
+    // substr(starts_at,1,10) is the 'YYYY-MM-DD' date part, portable across SQLite + Postgres
+    $st = db()->prepare("SELECT starts_at FROM appointments WHERE doctor_id = ? AND substr(starts_at,1,10) = ? AND status IN ('pending','confirmed')");
     $st->execute([$doctorId, $date]);
     foreach ($st->fetchAll() as $b) {
         $hm = date('H:i', strtotime($b['starts_at']));
@@ -193,7 +194,7 @@ function setting(string $key): string {
     static $cache = null;
     if ($cache === null) {
         $cache = [];
-        foreach (db()->query("SELECT `key`, value_fr, value_en FROM settings")->fetchAll() as $r) $cache[$r['key']] = $r;
+        foreach (db()->query('SELECT "key", value_fr, value_en FROM settings')->fetchAll() as $r) $cache[$r['key']] = $r;
     }
     return isset($cache[$key]) ? lcol($cache[$key], 'value') : '';
 }

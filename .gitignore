@@ -12,6 +12,9 @@
 /node_modules/
 /vendor/
 
+# Vercel CLI
+/.vercel/
+
 # OS / editor cruft
 Thumbs.db
 .DS_Store

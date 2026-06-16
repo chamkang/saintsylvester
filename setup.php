@@ -13,139 +13,118 @@ $pdo = db();
 $isCli = PHP_SAPI === 'cli';
 function out(string $m) { global $isCli; echo $m . ($isCli ? PHP_EOL : '<br>'); }
 
-if (SSMF_DB_DRIVER === 'mysql') {
-    /* ---- MySQL / MariaDB schema (production hosts, e.g. InfinityFree) ----
-     * Mirrors the SQLite schema below. CHECK constraints are dropped (the app
-     * validates in PHP); short indexed TEXT columns become VARCHAR; datetime
-     * defaults use CURRENT_TIMESTAMP; the SQLite partial unique index is
-     * replicated with a STORED generated column further down. */
+if (db_driver() === 'pgsql') {
+    /* ---- Postgres / Supabase schema (production on Vercel) ----
+     * Same shape as the SQLite schema below. TEXT/INTEGER and CHECK constraints
+     * carry over unchanged; AUTOINCREMENT becomes SERIAL; datetime('now') becomes
+     * to_char(now(),...); the reserved word "key" is double-quoted; and the
+     * partial unique index (no double-booking) is supported natively. */
     $pdo->exec("CREATE TABLE IF NOT EXISTS patients (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      mrn VARCHAR(20) UNIQUE,
-      first_name VARCHAR(80) NOT NULL, last_name VARCHAR(80) NOT NULL,
-      dob VARCHAR(10), sex VARCHAR(1),
-      marital_status VARCHAR(10),
-      phone VARCHAR(30) UNIQUE NOT NULL, email VARCHAR(190), address TEXT,
-      emergency_name VARCHAR(120), emergency_phone VARCHAR(30),
-      blood_group VARCHAR(5), allergies TEXT, medications TEXT,
-      consent_at DATETIME NULL, verified_at DATETIME NULL,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      updated_at DATETIME NULL, deleted_at DATETIME NULL
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
-
+      id SERIAL PRIMARY KEY,
+      mrn TEXT UNIQUE,
+      first_name TEXT NOT NULL, last_name TEXT NOT NULL,
+      dob TEXT, sex TEXT CHECK (sex IN ('F','M')),
+      marital_status TEXT CHECK (marital_status IN ('single','married','divorced','widowed') OR marital_status IS NULL),
+      phone TEXT UNIQUE NOT NULL, email TEXT, address TEXT,
+      emergency_name TEXT, emergency_phone TEXT,
+      blood_group TEXT, allergies TEXT, medications TEXT,
+      consent_at TEXT, verified_at TEXT,
+      created_at TEXT DEFAULT to_char(now(),'YYYY-MM-DD HH24:MI:SS'),
+      updated_at TEXT, deleted_at TEXT
+    )");
     $pdo->exec("CREATE TABLE IF NOT EXISTS doctors (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      slug VARCHAR(100) UNIQUE NOT NULL, full_name VARCHAR(160) NOT NULL,
-      onmc VARCHAR(20),
-      specialty_fr VARCHAR(160), specialty_en VARCHAR(160),
-      bio_fr TEXT, bio_en TEXT, photo VARCHAR(255),
-      languages VARCHAR(100), is_active TINYINT DEFAULT 1, sort_order INT DEFAULT 0
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
-
+      id SERIAL PRIMARY KEY,
+      slug TEXT UNIQUE NOT NULL, full_name TEXT NOT NULL,
+      onmc TEXT,
+      specialty_fr TEXT, specialty_en TEXT,
+      bio_fr TEXT, bio_en TEXT, photo TEXT,
+      languages TEXT, is_active INTEGER DEFAULT 1, sort_order INTEGER DEFAULT 0
+    )");
     $pdo->exec("CREATE TABLE IF NOT EXISTS services (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      slug VARCHAR(100) UNIQUE NOT NULL,
-      name_fr VARCHAR(160) NOT NULL, name_en VARCHAR(160) NOT NULL,
+      id SERIAL PRIMARY KEY,
+      slug TEXT UNIQUE NOT NULL,
+      name_fr TEXT NOT NULL, name_en TEXT NOT NULL,
       summary_fr TEXT, summary_en TEXT, body_fr TEXT, body_en TEXT,
       features_fr TEXT, features_en TEXT,
-      icon VARCHAR(50), duration_min INT DEFAULT 20,
-      is_flagship TINYINT DEFAULT 0, is_active TINYINT DEFAULT 1, sort_order INT DEFAULT 0
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
-
+      icon TEXT, duration_min INTEGER DEFAULT 20,
+      is_flagship INTEGER DEFAULT 0, is_active INTEGER DEFAULT 1, sort_order INTEGER DEFAULT 0
+    )");
     $pdo->exec("CREATE TABLE IF NOT EXISTS doctor_service (
-      doctor_id INT NOT NULL,
-      service_id INT NOT NULL,
+      doctor_id INTEGER NOT NULL REFERENCES doctors(id),
+      service_id INTEGER NOT NULL REFERENCES services(id),
       PRIMARY KEY (doctor_id, service_id)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
-
+    )");
     $pdo->exec("CREATE TABLE IF NOT EXISTS schedules (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      doctor_id INT NOT NULL,
-      weekday TINYINT NOT NULL,
-      start_time VARCHAR(5) NOT NULL, end_time VARCHAR(5) NOT NULL,
-      slot_minutes INT NOT NULL DEFAULT 20
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
-
+      id SERIAL PRIMARY KEY,
+      doctor_id INTEGER NOT NULL REFERENCES doctors(id),
+      weekday INTEGER NOT NULL CHECK (weekday BETWEEN 0 AND 6),
+      start_time TEXT NOT NULL, end_time TEXT NOT NULL,
+      slot_minutes INTEGER NOT NULL DEFAULT 20
+    )");
     $pdo->exec("CREATE TABLE IF NOT EXISTS schedule_exceptions (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      doctor_id INT NULL,
-      date VARCHAR(10) NOT NULL, start_time VARCHAR(5), end_time VARCHAR(5), reason VARCHAR(255)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
-
+      id SERIAL PRIMARY KEY,
+      doctor_id INTEGER REFERENCES doctors(id),
+      date TEXT NOT NULL, start_time TEXT, end_time TEXT, reason TEXT
+    )");
     $pdo->exec("CREATE TABLE IF NOT EXISTS appointments (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      reference VARCHAR(30) UNIQUE,
-      patient_id INT NULL,
-      guest_name VARCHAR(160), guest_phone VARCHAR(30), guest_email VARCHAR(190),
-      booking_for VARCHAR(10) DEFAULT 'self',
-      other_name VARCHAR(160),
-      doctor_id INT NOT NULL,
-      service_id INT NOT NULL,
-      starts_at VARCHAR(19) NOT NULL, ends_at VARCHAR(19) NOT NULL,
-      status VARCHAR(12) NOT NULL DEFAULT 'pending',
-      cancel_reason VARCHAR(255), notes TEXT,
-      payment_status VARCHAR(12) DEFAULT 'unpaid', amount INT NULL, currency VARCHAR(8) DEFAULT 'FCFA',
-      pay_token VARCHAR(64), paid_at DATETIME NULL,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP, updated_at DATETIME NULL
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
-
+      id SERIAL PRIMARY KEY,
+      reference TEXT UNIQUE,
+      patient_id INTEGER REFERENCES patients(id),
+      guest_name TEXT, guest_phone TEXT, guest_email TEXT,
+      booking_for TEXT DEFAULT 'self' CHECK (booking_for IN ('self','other')),
+      other_name TEXT,
+      doctor_id INTEGER NOT NULL REFERENCES doctors(id),
+      service_id INTEGER NOT NULL REFERENCES services(id),
+      starts_at TEXT NOT NULL, ends_at TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'pending'
+        CHECK (status IN ('pending','confirmed','completed','cancelled','no_show')),
+      cancel_reason TEXT, notes TEXT,
+      payment_status TEXT DEFAULT 'unpaid', amount INTEGER, currency TEXT DEFAULT 'FCFA',
+      pay_token TEXT, paid_at TEXT,
+      created_at TEXT DEFAULT to_char(now(),'YYYY-MM-DD HH24:MI:SS'), updated_at TEXT
+    )");
     $pdo->exec("CREATE TABLE IF NOT EXISTS payments (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      appointment_id INT NULL,
-      provider VARCHAR(20) NOT NULL, provider_ref VARCHAR(120),
-      amount INT NOT NULL, currency VARCHAR(8) DEFAULT 'FCFA',
-      status VARCHAR(12) NOT NULL DEFAULT 'pending',
-      payer_phone VARCHAR(30), method VARCHAR(20), raw TEXT,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP, updated_at DATETIME NULL
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
-
-    /* double-booking guard — MySQL has no partial index, so a STORED generated
-     * column is non-NULL only while a slot is actively held (pending/confirmed);
-     * a UNIQUE key on it rejects a second hold with SQLSTATE 23000 (caught in
-     * api/book.php). Wrapped in try/catch so a re-run, or an older MySQL without
-     * generated columns, still installs — the app-level slot check in book.php
-     * remains the first line of defence either way. */
-    try {
-        $pdo->exec("ALTER TABLE appointments
-            ADD COLUMN slot_lock VARCHAR(64)
-            GENERATED ALWAYS AS (CASE WHEN status IN ('pending','confirmed')
-                THEN CONCAT(doctor_id,'@',starts_at) END) STORED");
-        $pdo->exec("CREATE UNIQUE INDEX no_double_booking ON appointments (slot_lock)");
-    } catch (Throwable $e) { /* already present, or unsupported MySQL version */ }
-
+      id SERIAL PRIMARY KEY,
+      appointment_id INTEGER REFERENCES appointments(id),
+      provider TEXT NOT NULL, provider_ref TEXT,
+      amount INTEGER NOT NULL, currency TEXT DEFAULT 'FCFA',
+      status TEXT NOT NULL DEFAULT 'pending',
+      payer_phone TEXT, method TEXT, raw TEXT,
+      created_at TEXT DEFAULT to_char(now(),'YYYY-MM-DD HH24:MI:SS'), updated_at TEXT
+    )");
+    // FR-B5: a live (pending/confirmed) appointment locks its slot — Postgres
+    // supports the partial unique index natively (unlike MySQL).
+    $pdo->exec("CREATE UNIQUE INDEX IF NOT EXISTS no_double_booking
+                ON appointments (doctor_id, starts_at)
+                WHERE status IN ('pending','confirmed')");
     $pdo->exec("CREATE TABLE IF NOT EXISTS users (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      name VARCHAR(120) NOT NULL, email VARCHAR(190) UNIQUE NOT NULL, password_hash VARCHAR(255) NOT NULL,
-      role VARCHAR(15) NOT NULL DEFAULT 'receptionist',
-      last_login_at DATETIME NULL, is_active TINYINT DEFAULT 1
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
-
+      id SERIAL PRIMARY KEY,
+      name TEXT NOT NULL, email TEXT UNIQUE NOT NULL, password_hash TEXT NOT NULL,
+      role TEXT NOT NULL DEFAULT 'receptionist' CHECK (role IN ('admin','receptionist')),
+      last_login_at TEXT, is_active INTEGER DEFAULT 1
+    )");
     $pdo->exec("CREATE TABLE IF NOT EXISTS messages (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      name VARCHAR(160) NOT NULL, phone VARCHAR(30), email VARCHAR(190), body TEXT NOT NULL,
-      is_read TINYINT DEFAULT 0, created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
-
+      id SERIAL PRIMARY KEY,
+      name TEXT NOT NULL, phone TEXT, email TEXT, body TEXT NOT NULL,
+      is_read INTEGER DEFAULT 0, created_at TEXT DEFAULT to_char(now(),'YYYY-MM-DD HH24:MI:SS')
+    )");
     $pdo->exec("CREATE TABLE IF NOT EXISTS testimonials (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      initials VARCHAR(40) NOT NULL, body_fr TEXT NOT NULL, body_en TEXT NOT NULL,
-      is_published TINYINT DEFAULT 1, sort_order INT DEFAULT 0
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
-
-    $pdo->exec("CREATE TABLE IF NOT EXISTS settings (
-      `key` VARCHAR(80) PRIMARY KEY, value_fr TEXT, value_en TEXT
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
-
+      id SERIAL PRIMARY KEY,
+      initials TEXT NOT NULL, body_fr TEXT NOT NULL, body_en TEXT NOT NULL,
+      is_published INTEGER DEFAULT 1, sort_order INTEGER DEFAULT 0
+    )");
+    $pdo->exec('CREATE TABLE IF NOT EXISTS settings (
+      "key" TEXT PRIMARY KEY, value_fr TEXT, value_en TEXT
+    )');
     $pdo->exec("CREATE TABLE IF NOT EXISTS rate_limits (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      ip VARCHAR(45) NOT NULL, action VARCHAR(40) NOT NULL, ts BIGINT NOT NULL
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
-
+      id SERIAL PRIMARY KEY,
+      ip TEXT NOT NULL, action TEXT NOT NULL, ts BIGINT NOT NULL
+    )");
     $pdo->exec("CREATE TABLE IF NOT EXISTS audit_log (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      user_id INT, action VARCHAR(60) NOT NULL, entity VARCHAR(40), entity_id INT,
-      changes TEXT, created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+      id SERIAL PRIMARY KEY,
+      user_id INTEGER, action TEXT NOT NULL, entity TEXT, entity_id INTEGER,
+      changes TEXT, created_at TEXT DEFAULT to_char(now(),'YYYY-MM-DD HH24:MI:SS')
+    )");
 
 } else {
 
@@ -363,7 +342,7 @@ if ((int)$pdo->query("SELECT COUNT(*) c FROM services")->fetch()['c'] === 0) {
         'Treated for my hypertension by the cardiologist. Online booking is very practical — zero waiting at the clinic.', 2]);
 
     // settings
-    $set = $pdo->prepare("INSERT INTO settings (`key`,value_fr,value_en) VALUES (?,?,?)");
+    $set = $pdo->prepare('INSERT INTO settings ("key",value_fr,value_en) VALUES (?,?,?)');
     $set->execute(['hours_weekday_val', '08h00 – 18h00', '8:00 AM – 6:00 PM']);
     $set->execute(['hours_saturday_val', '08h00 – 14h00', '8:00 AM – 2:00 PM']);
     // PLACEHOLDER stats — confirm real figures with the clinic
