@@ -13,7 +13,7 @@ require_once __DIR__ . '/../config.php';
 function db_driver(): string {
     static $driver = null;
     if ($driver !== null) return $driver;
-    $driver = (getenv('DATABASE_URL') || getenv('DB_HOST')) ? 'pgsql' : SSMF_DB_DRIVER;
+    $driver = (getenv('DATABASE_URL') || getenv('POSTGRES_URL') || getenv('DB_HOST')) ? 'pgsql' : SSMF_DB_DRIVER;
     return $driver;
 }
 
@@ -28,19 +28,22 @@ function db(): PDO {
 
     switch (db_driver()) {
         case 'pgsql':
-            // Supabase / Postgres. Accept either a single DATABASE_URL (the libpq
-            // URI Supabase shows) or discrete DB_HOST/DB_PORT/DB_NAME/DB_USER/DB_PASSWORD.
-            $url = getenv('DATABASE_URL');
+            // Neon / Supabase / any Postgres. Accept a single connection URI
+            // (DATABASE_URL, or POSTGRES_URL which Vercel's integration sets) or
+            // discrete DB_HOST/DB_PORT/DB_NAME/DB_USER/DB_PASSWORD vars.
+            // Default port is 5432 (standard Postgres / Neon); Supabase's pooler
+            // URI carries its own :6543 explicitly, so it is unaffected.
+            $url = getenv('DATABASE_URL') ?: getenv('POSTGRES_URL');
             if ($url) {
                 $p    = parse_url($url) ?: [];
                 $host = $p['host'] ?? '';
-                $port = $p['port'] ?? 6543;
+                $port = $p['port'] ?? 5432;
                 $name = isset($p['path']) ? ltrim($p['path'], '/') : 'postgres';
                 $user = isset($p['user']) ? rawurldecode($p['user']) : '';
                 $pass = isset($p['pass']) ? rawurldecode($p['pass']) : '';
             } else {
                 $host = getenv('DB_HOST') ?: '';
-                $port = getenv('DB_PORT') ?: '6543';
+                $port = getenv('DB_PORT') ?: '5432';
                 $name = getenv('DB_NAME') ?: 'postgres';
                 $user = getenv('DB_USER') ?: '';
                 $pass = getenv('DB_PASSWORD') ?: '';
