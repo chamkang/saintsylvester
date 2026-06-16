@@ -48,13 +48,18 @@ function db(): PDO {
                 $user = getenv('DB_USER') ?: '';
                 $pass = getenv('DB_PASSWORD') ?: '';
             }
-            // Supabase requires SSL; emulated prepares keep us compatible with the
-            // transaction pooler (port 6543), which has no server-side prepares.
+            // SSL is required; emulated prepares keep us compatible with poolers
+            // (Supabase 6543 / Neon pooler) that have no server-side prepares.
             $opt[PDO::ATTR_EMULATE_PREPARES] = true;
-            $pdo = new PDO(
-                sprintf('pgsql:host=%s;port=%s;dbname=%s;sslmode=require', $host, $port, $name),
-                $user, $pass, $opt
-            );
+            $dsn = sprintf('pgsql:host=%s;port=%s;dbname=%s;sslmode=require', $host, $port, $name);
+            // Neon routes connections by SNI, but the vercel-php libpq is too old to
+            // send it — so pass the endpoint id explicitly (the first hostname label,
+            // minus any "-pooler" suffix). Harmless/skipped for non-Neon hosts.
+            if (strpos($host, '.neon.tech') !== false) {
+                $endpoint = preg_replace('/-pooler$/', '', explode('.', $host)[0]);
+                $dsn .= ';options=endpoint=' . $endpoint;
+            }
+            $pdo = new PDO($dsn, $user, $pass, $opt);
             break;
 
         case 'mysql':
