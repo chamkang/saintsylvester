@@ -1,9 +1,33 @@
 <?php
 require_once __DIR__ . '/functions.php';
 $page = $page ?? '';
-$pageTitle = $pageTitle ?? t('meta_title');
-$pageDesc = $pageDesc ?? t('meta_desc');
 $lang = current_lang();
+
+// Per-page <title> (a page may set $pageTitle before including this file)
+$ssmf_titles = [
+    'about'       => t('nav_about'),
+    'services'    => t('nav_services'),
+    'doctors'     => t('nav_doctors'),
+    'contact'     => t('nav_contact'),
+    'appointment' => t('nav_book'),
+    'register'    => t('nav_register'),
+    'manage'      => t('nav_manage'),
+];
+if (!isset($pageTitle) && isset($ssmf_titles[$page])) {
+    $pageTitle = $ssmf_titles[$page] . ' — ' . CLINIC_NAME;
+}
+$pageTitle = $pageTitle ?? t('meta_title');
+$pageDesc  = $pageDesc ?? t('meta_desc');
+
+// SEO: absolute URLs for canonical / hreflang / Open Graph
+$ssmf_scheme = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+    || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https')) ? 'https' : 'http';
+$ssmf_host  = $_SERVER['HTTP_HOST'] ?? 'saintsylvester.vercel.app';
+$ssmf_base  = $ssmf_scheme . '://' . $ssmf_host;
+$ssmf_path  = strtok($_SERVER['REQUEST_URI'] ?? '/', '?');
+$ssmf_canon = $ssmf_base . $ssmf_path . '?lang=' . $lang;
+$ssmf_ogimg = $ssmf_base . '/assets/img/hero/slide-1.jpg';
+$ssmf_ogloc = $lang === 'fr' ? 'fr_FR' : 'en_US';
 ?>
 <!DOCTYPE html>
 <html lang="<?= $lang ?>">
@@ -12,6 +36,25 @@ $lang = current_lang();
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title><?= e($pageTitle) ?></title>
 <meta name="description" content="<?= e($pageDesc) ?>">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="<?= e($ssmf_canon) ?>">
+<link rel="alternate" hreflang="fr" href="<?= e($ssmf_base . $ssmf_path) ?>?lang=fr">
+<link rel="alternate" hreflang="en" href="<?= e($ssmf_base . $ssmf_path) ?>?lang=en">
+<link rel="alternate" hreflang="x-default" href="<?= e($ssmf_base . $ssmf_path) ?>">
+
+<!-- Open Graph / Twitter -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="<?= e(CLINIC_NAME) ?>">
+<meta property="og:title" content="<?= e($pageTitle) ?>">
+<meta property="og:description" content="<?= e($pageDesc) ?>">
+<meta property="og:url" content="<?= e($ssmf_canon) ?>">
+<meta property="og:image" content="<?= e($ssmf_ogimg) ?>">
+<meta property="og:locale" content="<?= $ssmf_ogloc ?>">
+<meta property="og:locale:alternate" content="<?= $lang === 'fr' ? 'en_US' : 'fr_FR' ?>">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="<?= e($pageTitle) ?>">
+<meta name="twitter:description" content="<?= e($pageDesc) ?>">
+<meta name="twitter:image" content="<?= e($ssmf_ogimg) ?>">
 <meta name="theme-color" content="#051E33">
 <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,14 +62,33 @@ $lang = current_lang();
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/main.css">
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "MedicalClinic",
-  "name": "<?= CLINIC_NAME ?>",
-  "address": {"@type": "PostalAddress", "addressLocality": "Bonaberi, Douala", "addressCountry": "CM"},
-  "telephone": "<?= CLINIC_PHONE ?>",
-  "medicalSpecialty": ["Gynecologic", "Obstetric", "Pediatric", "Cardiovascular", "PrimaryCare"]
-}
+<?= json_encode([
+    '@context' => 'https://schema.org',
+    '@type' => 'MedicalClinic',
+    'name' => CLINIC_NAME,
+    'url' => $ssmf_base . '/',
+    'image' => $ssmf_ogimg,
+    'telephone' => CLINIC_PHONE,
+    'email' => CLINIC_EMAIL,
+    'priceRange' => '$$',
+    'address' => [
+        '@type' => 'PostalAddress',
+        'streetAddress' => 'BP 9026, Bonabéri',
+        'addressLocality' => 'Douala',
+        'addressRegion' => 'Littoral',
+        'addressCountry' => 'CM',
+    ],
+    'areaServed' => [
+        ['@type' => 'City', 'name' => 'Douala'],
+        ['@type' => 'Country', 'name' => 'Cameroun'],
+    ],
+    'openingHoursSpecification' => [
+        '@type' => 'OpeningHoursSpecification',
+        'dayOfWeek' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+        'opens' => '00:00', 'closes' => '23:59',
+    ],
+    'medicalSpecialty' => ['Gynecologic', 'Obstetric', 'Pediatric', 'Cardiovascular', 'PrimaryCare'],
+], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) ?>
 </script>
 </head>
 <body data-page="<?= e($page) ?>">

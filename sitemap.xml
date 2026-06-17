@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://saintsylvester.vercel.app/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://saintsylvester.vercel.app/about.php</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://saintsylvester.vercel.app/services.php</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://saintsylvester.vercel.app/doctors.php</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://saintsylvester.vercel.app/contact.php</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://saintsylvester.vercel.app/appointment.php</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://saintsylvester.vercel.app/service.php?slug=fertility</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://saintsylvester.vercel.app/service.php?slug=gynecology</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://saintsylvester.vercel.app/service.php?slug=antenatal</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://saintsylvester.vercel.app/service.php?slug=general-medicine</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://saintsylvester.vercel.app/service.php?slug=internal-medicine</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://saintsylvester.vercel.app/service.php?slug=pediatrics</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://saintsylvester.vercel.app/service.php?slug=surgery</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://saintsylvester.vercel.app/service.php?slug=imaging</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://saintsylvester.vercel.app/service.php?slug=laboratory</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+</urlset>
