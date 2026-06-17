@@ -60,10 +60,6 @@
   </div>
 </footer>
 
-<a class="wa-bubble" href="https://wa.me/<?= CLINIC_WHATSAPP ?>" target="_blank" rel="noopener" aria-label="<?= t('wa_bubble') ?>">
-  <?= icon('whatsapp') ?><span class="wa-tip"><?= t('wa_bubble') ?></span>
-</a>
-
 <div class="mobile-bar" role="navigation" aria-label="Quick actions">
   <a href="tel:<?= CLINIC_PHONE_LINK ?>"><?= icon('phone') ?> <?= t('mb_call') ?></a>
   <a class="mobile-bar-book" href="appointment.php"><?= icon('calendar') ?> <?= t('mb_book') ?></a>

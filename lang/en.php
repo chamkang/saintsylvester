@@ -62,6 +62,14 @@ return [
     'fert_li4'        => 'Pregnancy follow-up and antenatal visits',
     'fert_cta'        => 'See a specialist',
 
+    // IVF / PMA spotlight band (home)
+    'ivf_badge'       => 'Fertility & IVF Center',
+    'ivf_title'       => 'IVF & assisted reproduction,',
+    'ivf_accent'      => 'right here in Douala',
+    'ivf_sub'         => 'No need to travel abroad: fertility work-up, stimulation, insemination and in-vitro fertilisation (IVF) are all done here — with caring, personal support at every step of your journey to parenthood.',
+    'ivf_cta_book'    => 'Book a consultation',
+    'ivf_cta_more'    => 'Explore the journey',
+
     // Doctors
     'docs_eyebrow'    => 'Our team',
     'docs_title'      => 'Specialists who listen',

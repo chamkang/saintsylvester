@@ -62,6 +62,14 @@ return [
     'fert_li4'        => 'Suivi de grossesse et consultations prénatales',
     'fert_cta'        => 'Consulter un spécialiste',
 
+    // IVF / PMA spotlight band (home)
+    'ivf_badge'       => 'Centre de Fertilité & PMA',
+    'ivf_title'       => 'La FIV et la PMA,',
+    'ivf_accent'      => 'ici même à Douala',
+    'ivf_sub'         => "Plus besoin de voyager à l'étranger : bilan de fertilité, stimulation, insémination et fécondation in vitro (FIV) sont réalisés sur place, avec un accompagnement humain à chaque étape de votre parcours vers la parentalité.",
+    'ivf_cta_book'    => 'Prendre rendez-vous',
+    'ivf_cta_more'    => 'Découvrir le parcours',
+
     // Doctors
     'docs_eyebrow'    => 'Notre équipe',
     'docs_title'      => 'Des spécialistes à votre écoute',

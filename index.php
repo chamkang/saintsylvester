@@ -77,6 +77,20 @@ function testi_letters(string $initials): string {
   </div>
 </section>
 
+<!-- ============ FERTILITY / IVF SPOTLIGHT — flagship service, placed first ============ -->
+<section class="ivf-band" aria-label="<?= e(t('ivf_badge')) ?>">
+  <div class="ivf-bg" aria-hidden="true"><img src="assets/img/home/incubator.jpg" alt=""></div>
+  <div class="container ivf-inner">
+    <span class="ivf-badge"><?= icon('heart') ?> <?= t('ivf_badge') ?></span>
+    <h2><?= t('ivf_title') ?> <span class="ivf-accent"><?= t('ivf_accent') ?></span></h2>
+    <p class="ivf-lead"><?= t('ivf_sub') ?></p>
+    <div class="ivf-ctas">
+      <a class="btn btn-primary btn-lg" href="appointment.php?service=fertility"><?= icon('calendar') ?> <?= t('ivf_cta_book') ?></a>
+      <a class="btn btn-ghost-light btn-lg" href="service.php?slug=fertility"><?= t('ivf_cta_more') ?> <?= icon('arrow') ?></a>
+    </div>
+  </div>
+</section>
+
 <!-- ============ INFO TRIO ============ -->
 <div class="info-trio container">
   <div class="info-trio-grid">
