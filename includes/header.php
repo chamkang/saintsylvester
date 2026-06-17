@@ -17,7 +17,21 @@ if (!isset($pageTitle) && isset($ssmf_titles[$page])) {
     $pageTitle = $ssmf_titles[$page] . ' — ' . CLINIC_NAME;
 }
 $pageTitle = $pageTitle ?? t('meta_title');
-$pageDesc  = $pageDesc ?? t('meta_desc');
+
+// Per-page meta description (a page may set $pageDesc before including this file)
+$ssmf_descs = [
+    'about'       => t('seo_about_desc'),
+    'services'    => t('seo_services_desc'),
+    'doctors'     => t('seo_doctors_desc'),
+    'contact'     => t('seo_contact_desc'),
+    'appointment' => t('seo_book_desc'),
+    'register'    => t('seo_register_desc'),
+    'manage'      => t('seo_manage_desc'),
+];
+if (!isset($pageDesc) && isset($ssmf_descs[$page])) {
+    $pageDesc = $ssmf_descs[$page];
+}
+$pageDesc = $pageDesc ?? t('meta_desc');
 
 // SEO: absolute URLs for canonical / hreflang / Open Graph
 $ssmf_scheme = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')

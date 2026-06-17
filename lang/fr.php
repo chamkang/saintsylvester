@@ -3,6 +3,13 @@ return [
     // Meta
     'meta_title'      => 'Saint Sylvester Medical Foundation — Centre de fertilité à Bonabéri, Douala',
     'meta_desc'       => 'Centre médical et de fertilité à Bonabéri, Douala. Gynécologie, obstétrique, pédiatrie, cardiologie, chirurgie, laboratoire. Prenez rendez-vous en ligne.',
+    'seo_about_desc'    => 'Découvrez Saint Sylvester Medical Foundation à Bonabéri, Douala : une équipe médicale expérimentée en gynécologie, fertilité (FIV/PMA), pédiatrie et cardiologie.',
+    'seo_services_desc' => 'Nos services à Douala : fertilité & FIV, obstétrique-gynécologie, consultation prénatale, pédiatrie, médecine interne, chirurgie, imagerie et laboratoire.',
+    'seo_doctors_desc'  => 'Rencontrez les médecins de Saint Sylvester Medical Foundation à Bonabéri, Douala : gynécologues-obstétriciens, pédiatre, interniste-cardiologue et généraliste.',
+    'seo_contact_desc'  => "Contactez Saint Sylvester Medical Foundation à Bonabéri, Douala. Ouvert 24h/24 : téléphone, WhatsApp, plan d'accès et formulaire de contact.",
+    'seo_book_desc'     => 'Prenez rendez-vous en ligne à Saint Sylvester Medical Foundation, Douala. Réservation simple en 4 étapes, sans compte : fertilité, gynécologie et plus.',
+    'seo_register_desc' => 'Enregistrez votre dossier patient à Saint Sylvester Medical Foundation, Douala, pour accélérer votre prise en charge lors de votre visite.',
+    'seo_manage_desc'   => "Gérez ou annulez votre rendez-vous à Saint Sylvester Medical Foundation à l'aide de votre code de réservation.",
 
     // Top bar & nav
     'top_hours'       => 'Ouvert 24h/24 · 7j/7',
