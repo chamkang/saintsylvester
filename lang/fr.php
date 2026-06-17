@@ -5,7 +5,7 @@ return [
     'meta_desc'       => 'Centre médical et de fertilité à Bonabéri, Douala. Gynécologie, obstétrique, pédiatrie, cardiologie, chirurgie, laboratoire. Prenez rendez-vous en ligne.',
 
     // Top bar & nav
-    'top_hours'       => 'Lun – Sam : 8h00 – 18h00',
+    'top_hours'       => 'Ouvert 24h/24 · 7j/7',
     'top_call'        => 'Appelez-nous',
     'nav_home'        => 'Accueil',
     'nav_about'       => 'À propos',
@@ -98,6 +98,8 @@ return [
     'hours_saturday'  => 'Samedi',
     'hours_sunday'    => 'Dimanche',
     'hours_sunday_val' => 'Urgences uniquement',
+    'hours_all'       => 'Tous les jours',
+    'hours_all_val'   => 'Ouvert 24h/24',
 
     // Booking wizard
     'bk_title'        => 'Prendre rendez-vous',

@@ -63,9 +63,7 @@ $lang = current_lang();
         <span class="svc-chip"><?= icon('clock') ?></span>
         <div>
           <h3><?= t('ct_hours_t') ?></h3>
-          <p><?= t('hours_weekday') ?> : <?= e(setting('hours_weekday_val')) ?><br>
-             <?= t('hours_saturday') ?> : <?= e(setting('hours_saturday_val')) ?><br>
-             <?= t('hours_sunday') ?> : <?= t('hours_sunday_val') ?></p>
+          <p><?= t('hours_all') ?> : <strong><?= t('hours_all_val') ?></strong></p>
         </div>
       </div>
     </div>

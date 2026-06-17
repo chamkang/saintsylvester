@@ -5,7 +5,7 @@ return [
     'meta_desc'       => 'Medical and fertility center in Bonaberi, Douala. Gynecology, obstetrics, pediatrics, cardiology, surgery, laboratory. Book your appointment online.',
 
     // Top bar & nav
-    'top_hours'       => 'Mon – Sat: 8:00 AM – 6:00 PM',
+    'top_hours'       => 'Open 24/7 · Every day',
     'top_call'        => 'Call us',
     'nav_home'        => 'Home',
     'nav_about'       => 'About',
@@ -98,6 +98,8 @@ return [
     'hours_saturday'  => 'Saturday',
     'hours_sunday'    => 'Sunday',
     'hours_sunday_val' => 'Emergencies only',
+    'hours_all'       => 'Every day',
+    'hours_all_val'   => 'Open 24/7',
 
     // Booking wizard
     'bk_title'        => 'Book an appointment',

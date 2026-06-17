@@ -97,9 +97,7 @@ function testi_letters(string $initials): string {
     <div class="trio-card trio-dark">
       <h3><?= icon('clock') ?> <?= t('trio_hours_t') ?></h3>
       <ul class="trio-hours">
-        <li><span><?= t('hours_weekday') ?></span><strong><?= e(setting('hours_weekday_val')) ?></strong></li>
-        <li><span><?= t('hours_saturday') ?></span><strong><?= e(setting('hours_saturday_val')) ?></strong></li>
-        <li><span><?= t('hours_sunday') ?></span><strong><?= t('hours_sunday_val') ?></strong></li>
+        <li><span><?= t('hours_all') ?></span><strong><?= t('hours_all_val') ?></strong></li>
       </ul>
       <a class="trio-phone" href="tel:<?= CLINIC_PHONE_LINK ?>"><?= icon('phone') ?> <?= CLINIC_PHONE ?></a>
     </div>

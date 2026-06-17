@@ -72,9 +72,7 @@ page_banner(lcol($svc, 'name'), lcol($svc, 'summary'), t('nav_services'), $photo
       <div class="form-card">
         <h3 style="font-size:1.05rem;display:flex;align-items:center;gap:9px"><?= icon('clock') ?> <?= t('trio_hours_t') ?></h3>
         <ul class="hours-list hours-light">
-          <li><span><?= t('hours_weekday') ?></span><strong><?= e(setting('hours_weekday_val')) ?></strong></li>
-          <li><span><?= t('hours_saturday') ?></span><strong><?= e(setting('hours_saturday_val')) ?></strong></li>
-          <li><span><?= t('hours_sunday') ?></span><strong><?= t('hours_sunday_val') ?></strong></li>
+          <li><span><?= t('hours_all') ?></span><strong><?= t('hours_all_val') ?></strong></li>
         </ul>
       </div>
 

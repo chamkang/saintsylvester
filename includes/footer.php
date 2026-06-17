@@ -39,9 +39,7 @@
     <div class="footer-col">
       <h3><?= t('foot_hours') ?></h3>
       <ul class="hours-list">
-        <li><span><?= t('hours_weekday') ?></span><strong><?= e(setting('hours_weekday_val')) ?></strong></li>
-        <li><span><?= t('hours_saturday') ?></span><strong><?= e(setting('hours_saturday_val')) ?></strong></li>
-        <li><span><?= t('hours_sunday') ?></span><strong><?= t('hours_sunday_val') ?></strong></li>
+        <li><span><?= t('hours_all') ?></span><strong><?= t('hours_all_val') ?></strong></li>
       </ul>
       <a class="footer-phone" href="tel:<?= CLINIC_PHONE_LINK ?>"><?= icon('phone') ?> <?= CLINIC_PHONE ?></a>
     </div>
