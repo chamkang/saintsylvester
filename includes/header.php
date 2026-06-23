@@ -70,7 +70,7 @@ $ssmf_ogloc = $lang === 'fr' ? 'fr_FR' : 'en_US';
 <meta name="twitter:description" content="<?= e($pageDesc) ?>">
 <meta name="twitter:image" content="<?= e($ssmf_ogimg) ?>">
 <meta name="theme-color" content="#051E33">
-<link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+<link rel="icon" type="image/png" href="assets/img/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -153,22 +153,15 @@ $ssmf_ogloc = $lang === 'fr' ? 'fr_FR' : 'en_US';
 <main id="main">
 <?php
 /* ---------- shared inline SVG helpers ---------- */
+/* Official Saint Sylvester mark (green cross + blue fertility motif). The logo
+   is full-colour, so the same image reads on both the transparent and scrolled
+   navbar states — no separate dark/light variant needed. */
 function ssmf_logo(): string {
-    return '<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <circle cx="24" cy="24" r="20" fill="none" stroke="#0A3D62" stroke-width="2.2" stroke-dasharray="5 6" opacity=".45"/>
-      <rect x="19" y="9" width="10" height="30" rx="5" fill="#0A3D62"/>
-      <rect x="9" y="19" width="30" height="10" rx="5" fill="#0A3D62"/>
-      <circle cx="40" cy="9" r="3.4" fill="#0E9F63"/>
-    </svg>';
+    return '<img src="assets/img/logo.png" alt="Saint Sylvester Medical Foundation" style="display:block;width:100%;height:100%;object-fit:contain" loading="eager">';
 }
 
 function ssmf_logo_light(): string {
-    return '<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <circle cx="24" cy="24" r="20" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-dasharray="5 6" opacity=".4"/>
-      <rect x="19" y="9" width="10" height="30" rx="5" fill="#ffffff"/>
-      <rect x="9" y="19" width="30" height="10" rx="5" fill="#ffffff"/>
-      <circle cx="40" cy="9" r="3.4" fill="#0E9F63"/>
-    </svg>';
+    return ssmf_logo();
 }
 
 function icon(string $name): string {
