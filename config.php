@@ -8,6 +8,11 @@ date_default_timezone_set('Africa/Douala');
 
 define('SSMF_DB_DRIVER', 'sqlite');
 
+// Canonical content (doctors + schedules) is re-synced from includes/seed-content.php
+// whenever this version string changes. Bump it after editing seed content so the
+// change applies on deploy without re-running setup or writing SQL.
+define('SSMF_CONTENT_VERSION', '2026-06-23.schedules+ayamena');
+
 // SQLite (dev)
 define('SSMF_SQLITE_PATH', __DIR__ . '/data/clinic.sqlite');
 

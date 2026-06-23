@@ -190,6 +190,10 @@ function doctor_days(int $doctorId): string {
 
 require_once __DIR__ . '/payments.php';
 
+// Keep canonical content (doctors + schedules) in step with the code on deploy.
+require_once __DIR__ . '/content-sync.php';
+ssmf_ensure_content();
+
 function setting(string $key): string {
     static $cache = null;
     if ($cache === null) {
