@@ -54,7 +54,7 @@ contact-message inbox.
 
 - Phone/WhatsApp: +237 675 97 13 96 · Email: fmsaintsylvestre@gmail.com · BP 9026 Bonabéri (`config.php`)
 - Real medical team with ONMC numbers (`includes/seed-content.php` + DB): Dr. Akwa John (founder),
-  Dr. Ayameria Assiene, Dr. Yemene Zangue, Dr. Engama Ebong, Dr. Tchatchouang Lowe
+  Dr. Ayamena Assiene, Dr. Yemene Zangue, Dr. Engama Ebong, Dr. Tchatchouang Lowe
 - Rich bilingual content on all 9 service pages (body + feature lists, stored in `services` table)
 
 ## STILL PLACEHOLDER — replace before launch
