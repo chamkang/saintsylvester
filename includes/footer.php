@@ -65,18 +65,23 @@
 
 <div class="cookie-bar" id="cookieBar" role="dialog" aria-live="polite" aria-label="<?= e(t('cookie_title')) ?>">
   <p><?= t('cookie_text') ?></p>
-  <button type="button" class="btn btn-primary" id="cookieAccept"><?= t('cookie_accept') ?></button>
+  <div class="cookie-actions">
+    <button type="button" class="btn btn-outline" id="cookieDecline"><?= t('cookie_decline') ?></button>
+    <button type="button" class="btn btn-primary" id="cookieAccept"><?= t('cookie_accept') ?></button>
+  </div>
 </div>
 <script>
 (function () {
   try {
     var bar = document.getElementById('cookieBar');
     if (!bar) return;
-    if (localStorage.getItem('ssmf_cookie_ok') !== '1') bar.classList.add('show');
-    document.getElementById('cookieAccept').addEventListener('click', function () {
-      try { localStorage.setItem('ssmf_cookie_ok', '1'); } catch (e) {}
+    if (!localStorage.getItem('ssmf_cookie_choice')) bar.classList.add('show');
+    function choose(v) {
+      try { localStorage.setItem('ssmf_cookie_choice', v); } catch (e) {}
       bar.classList.remove('show');
-    });
+    }
+    document.getElementById('cookieAccept').addEventListener('click', function () { choose('accepted'); });
+    document.getElementById('cookieDecline').addEventListener('click', function () { choose('declined'); });
   } catch (e) {}
 })();
 </script>
