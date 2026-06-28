@@ -44,10 +44,6 @@ $lang = current_lang();
     </div>
 
     <div>
-      <div class="contact-map reveal" data-tilt>
-        <iframe src="<?= CLINIC_MAP_EMBED ?>" title="Google Maps — <?= CLINIC_NAME ?>" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
-      </div>
-
       <div class="form-card reveal" style="text-align:center">
         <h2 style="font-size:1.3rem"><?= t('ct_reach_t') ?></h2>
         <p style="color:var(--n-600);margin:8px 0 22px"><?= t('ct_reach_p') ?></p>
@@ -55,6 +51,10 @@ $lang = current_lang();
           <a class="btn btn-navy btn-lg" style="width:100%" href="tel:<?= CLINIC_PHONE_LINK ?>"><?= icon('phone') ?> <?= t('ct_call_btn') ?> · <?= CLINIC_PHONE ?></a>
           <a class="btn btn-primary btn-lg" style="width:100%" href="https://wa.me/<?= CLINIC_WHATSAPP ?>" target="_blank" rel="noopener"><?= icon('whatsapp') ?> <?= t('ct_wa_btn') ?></a>
         </div>
+      </div>
+
+      <div class="contact-map reveal" data-tilt style="margin-top:22px">
+        <iframe src="<?= CLINIC_MAP_EMBED ?>" title="Google Maps — <?= CLINIC_NAME ?>" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
       </div>
     </div>
 
