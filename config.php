@@ -38,8 +38,10 @@ define('CLINIC_MAP_LINK', 'https://maps.google.com/?q=Bonaberi,+Douala,+Cameroon
 define('BOOKING_DAYS_AHEAD', 21);     // how far in the future patients can book
 define('BOOKING_CUTOFF_HOURS', 2);    // same-day cutoff before slot time
 
-// ---- Payments (consultation fee, paid online before the visit) ----
-define('PAYMENT_ENABLED', true);
+// ---- Payments ----
+// false = consultation fee is paid at the clinic (no online payment step).
+// true  = collect the fee online at booking via PAYMENT_PROVIDER below.
+define('PAYMENT_ENABLED', false);
 // 'sandbox' = simulated payments for testing (no real money, works now).
 // 'fapshi'  = live MTN MoMo / Orange Money via Fapshi (set the env vars below).
 // Set PAYMENT_PROVIDER=fapshi in the Vercel environment variables to go live.

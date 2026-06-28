@@ -284,6 +284,7 @@ return [
     'bk_confirm_pay'  => 'Confirmer et payer',
     'bk_fee_label'    => 'Frais de consultation',
     'bk_fee_note'     => 'À régler en ligne juste après la confirmation.',
+    'bk_fee_atclinic' => 'À régler à la clinique le jour de votre visite.',
     'pay_title'       => 'Paiement de la consultation',
     'pay_sub'         => 'Réglez vos frais de consultation pour finaliser votre rendez-vous.',
     'pay_amount'      => 'Montant à payer',

@@ -284,6 +284,7 @@ return [
     'bk_confirm_pay'  => 'Confirm & pay',
     'bk_fee_label'    => 'Consultation fee',
     'bk_fee_note'     => 'Paid online right after you confirm.',
+    'bk_fee_atclinic' => 'Payable at the clinic on the day of your visit.',
     'pay_title'       => 'Consultation payment',
     'pay_sub'         => 'Pay your consultation fee to finalise your appointment.',
     'pay_amount'      => 'Amount to pay',

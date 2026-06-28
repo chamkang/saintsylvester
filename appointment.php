@@ -121,12 +121,12 @@ $bookingData = [
     <aside class="summary-card" aria-live="polite">
       <h3><?= icon('calendar') ?> <?= t('bk_summary') ?></h3>
       <div id="sumRows"><p class="sum-placeholder"><?= t('bk_sub') ?></p></div>
-      <?php if (PAYMENT_ENABLED && consultation_fee() > 0): ?>
+      <?php if (consultation_fee() > 0): ?>
       <div class="sum-fee">
         <span><?= t('bk_fee_label') ?></span>
         <strong id="sumFee"><?= e(money(consultation_fee())) ?></strong>
       </div>
-      <p class="sum-fee-note"><?= icon('shield') ?> <?= t('bk_fee_note') ?></p>
+      <p class="sum-fee-note"><?= icon('shield') ?> <?= PAYMENT_ENABLED ? t('bk_fee_note') : t('bk_fee_atclinic') ?></p>
       <?php endif; ?>
     </aside>
   </div>
