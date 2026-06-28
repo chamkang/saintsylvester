@@ -217,6 +217,9 @@ return [
     'ct_call_t'       => 'Phone',
     'ct_wa_t'         => 'WhatsApp',
     'ct_wa_btn'       => 'Chat on WhatsApp',
+    'ct_reach_t'      => 'Reach us directly',
+    'ct_reach_p'      => 'Tap to call us, or send a message on WhatsApp — we usually reply within minutes.',
+    'ct_call_btn'     => 'Call',
     'ct_hours_t'      => 'Opening hours',
     'ct_directions'   => 'Get directions',
 

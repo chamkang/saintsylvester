@@ -2,31 +2,6 @@
 $page = 'contact';
 require_once __DIR__ . '/includes/functions.php';
 
-$sent = false;
-$errors = [];
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!csrf_check($_POST['csrf'] ?? null) || !empty($_POST['website'])) {
-        $errors[] = t('err_generic');
-    } elseif (!rate_limit('contact', 5, 3600)) {
-        $errors[] = t('err_rate');
-    } else {
-        $name = trim($_POST['name'] ?? '');
-        $phone = clean_phone($_POST['phone'] ?? '');
-        $email = trim($_POST['email'] ?? '');
-        $body = trim($_POST['message'] ?? '');
-        if ($name === '' || $body === '') $errors[] = t('err_required');
-        if (!valid_phone($phone)) $errors[] = t('err_phone');
-        if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) $email = '';
-        if (!$errors) {
-            db()->prepare("INSERT INTO messages (name, phone, email, body) VALUES (?,?,?,?)")
-               ->execute([$name, $phone, $email ?: null, mb_substr($body, 0, 2000)]);
-            $sent = true;
-            // production: also send via SMTP (PHPMailer) — see TRD §6.1
-        }
-    }
-}
-
 require __DIR__ . '/includes/header.php';
 $lang = current_lang();
 ?>
@@ -73,43 +48,13 @@ $lang = current_lang();
         <iframe src="<?= CLINIC_MAP_EMBED ?>" title="Google Maps — <?= CLINIC_NAME ?>" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
       </div>
 
-      <div class="form-card reveal">
-        <h2 style="font-size:1.3rem"><?= t('ct_form_title') ?></h2>
-
-        <?php if ($sent): ?>
-          <div class="alert alert-success"><?= icon('check') ?> <?= t('ct_sent') ?></div>
-        <?php endif; ?>
-        <?php foreach (array_unique($errors) as $err): ?>
-          <div class="alert alert-error"><?= e($err) ?></div>
-        <?php endforeach; ?>
-
-        <?php if (!$sent): ?>
-        <form method="post" novalidate>
-          <input type="hidden" name="csrf" value="<?= csrf_token() ?>">
-          <input type="text" name="website" value="" style="position:absolute;left:-200vw" tabindex="-1" aria-hidden="true">
-          <div class="form-grid">
-            <div class="field">
-              <label for="cName"><?= t('ct_name') ?> <span class="req">*</span></label>
-              <input id="cName" name="name" type="text" required maxlength="120" value="<?= e($_POST['name'] ?? '') ?>">
-            </div>
-            <div class="field">
-              <label for="cPhone"><?= t('ct_phone') ?> <span class="req">*</span></label>
-              <input id="cPhone" name="phone" type="tel" required placeholder="+237 6XX XX XX XX" value="<?= e($_POST['phone'] ?? '') ?>">
-            </div>
-            <div class="field full">
-              <label for="cEmail"><?= t('ct_email') ?></label>
-              <input id="cEmail" name="email" type="email" maxlength="160" value="<?= e($_POST['email'] ?? '') ?>">
-            </div>
-            <div class="field full">
-              <label for="cMsg"><?= t('ct_msg') ?> <span class="req">*</span></label>
-              <textarea id="cMsg" name="message" required maxlength="2000"><?= e($_POST['message'] ?? '') ?></textarea>
-            </div>
-          </div>
-          <div style="margin-top:20px">
-            <button class="btn btn-primary" type="submit"><?= icon('mail') ?> <?= t('ct_send') ?></button>
-          </div>
-        </form>
-        <?php endif; ?>
+      <div class="form-card reveal" style="text-align:center">
+        <h2 style="font-size:1.3rem"><?= t('ct_reach_t') ?></h2>
+        <p style="color:var(--n-600);margin:8px 0 22px"><?= t('ct_reach_p') ?></p>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <a class="btn btn-navy btn-lg" style="width:100%" href="tel:<?= CLINIC_PHONE_LINK ?>"><?= icon('phone') ?> <?= t('ct_call_btn') ?> · <?= CLINIC_PHONE ?></a>
+          <a class="btn btn-primary btn-lg" style="width:100%" href="https://wa.me/<?= CLINIC_WHATSAPP ?>" target="_blank" rel="noopener"><?= icon('whatsapp') ?> <?= t('ct_wa_btn') ?></a>
+        </div>
       </div>
     </div>
 

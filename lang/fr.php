@@ -217,6 +217,9 @@ return [
     'ct_call_t'       => 'Téléphone',
     'ct_wa_t'         => 'WhatsApp',
     'ct_wa_btn'       => 'Écrire sur WhatsApp',
+    'ct_reach_t'      => 'Contactez-nous directement',
+    'ct_reach_p'      => 'Appelez-nous, ou écrivez-nous sur WhatsApp — nous répondons en quelques minutes.',
+    'ct_call_btn'     => 'Appeler',
     'ct_hours_t'      => 'Horaires',
     'ct_directions'   => 'Obtenir l\'itinéraire',
 
