@@ -926,6 +926,15 @@ body.menu-open { overflow: hidden; }
 .cookie-actions { display: flex; gap: 10px; flex: none; }
 .cookie-bar .btn { white-space: nowrap; }
 @media (max-width: 560px) { .cookie-bar { flex-direction: column; align-items: stretch; text-align: center; } .cookie-actions { width: 100%; } .cookie-actions .btn { flex: 1; } }
+
+/* Service FAQ accordion */
+.svc-faqs { margin-top: 34px; }
+.faq-item { border: 1px solid #e8edf2; border-radius: 12px; margin-bottom: 10px; background: #fff; }
+.faq-item summary { cursor: pointer; list-style: none; padding: 15px 18px; font-weight: 600; color: var(--navy-900); display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after { content: "+"; font-size: 1.4rem; line-height: 1; color: #0E9F63; }
+.faq-item[open] summary::after { content: "\2212"; }
+.faq-item .faq-a { padding: 0 18px 16px; color: var(--n-600); font-size: .95rem; line-height: 1.6; }
 .founder-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 70%, rgba(5,30,51,.35)); }
 .founder-onmc {
   position: absolute; z-index: 2; top: 14px; left: 14px;

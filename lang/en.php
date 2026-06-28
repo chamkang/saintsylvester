@@ -56,6 +56,7 @@ return [
     'svc_duration'    => 'Consultation length: about {min} min',
     'svc_doctors'     => 'Doctors for this service',
     'svc_features_t'  => 'What we offer',
+    'faq_title'       => 'Frequently asked questions',
     'onmc_label'      => 'ONMC No.',
     'svc_flagship'    => 'Our specialty',
 

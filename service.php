@@ -24,6 +24,7 @@ if ($svc['slug'] === 'fertility') {
 $paragraphs = array_filter(array_map('trim', explode("\n\n", (string)lcol($svc, 'body'))));
 if (!$paragraphs) $paragraphs = [lcol($svc, 'summary')];
 $features = array_filter(array_map('trim', explode('|', (string)lcol($svc, 'features'))));
+$faqs = ssmf_service_faqs($svc['slug'], current_lang());
 
 page_banner(lcol($svc, 'name'), lcol($svc, 'summary'), t('nav_services'), $photo);
 ?>
@@ -51,6 +52,28 @@ page_banner(lcol($svc, 'name'), lcol($svc, 'summary'), t('nav_services'), $photo
           <?php endforeach; ?>
         </ul>
       </div>
+      <?php endif; ?>
+
+      <?php if ($faqs): ?>
+      <div class="svc-faqs">
+        <h2><?= t('faq_title') ?></h2>
+        <hr class="head-rule" style="margin-bottom:18px">
+        <?php foreach ($faqs as $f): ?>
+        <details class="faq-item">
+          <summary><?= e($f[0]) ?></summary>
+          <div class="faq-a"><?= e($f[1]) ?></div>
+        </details>
+        <?php endforeach; ?>
+      </div>
+      <script type="application/ld+json"><?= json_encode([
+          '@context' => 'https://schema.org',
+          '@type' => 'FAQPage',
+          'mainEntity' => array_map(fn ($f) => [
+              '@type' => 'Question',
+              'name' => $f[0],
+              'acceptedAnswer' => ['@type' => 'Answer', 'text' => $f[1]],
+          ], $faqs),
+      ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
       <?php endif; ?>
     </div>
 

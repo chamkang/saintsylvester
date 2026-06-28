@@ -56,6 +56,7 @@ return [
     'svc_duration'    => 'Durée de consultation : environ {min} min',
     'svc_doctors'     => 'Médecins de ce service',
     'svc_features_t'  => 'Ce que nous proposons',
+    'faq_title'       => 'Questions fréquentes',
     'onmc_label'      => 'N° ONMC',
     'svc_flagship'    => 'Notre spécialité',
 
