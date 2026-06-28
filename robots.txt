@@ -1,9 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /admin/
-Disallow: /api/
-Disallow: /setup.php
-Disallow: /pay.php
-Disallow: /manage.php
-
-Sitemap: https://saintsylvester.vercel.app/sitemap.xml

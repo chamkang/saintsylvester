@@ -36,7 +36,7 @@ $pageDesc = $pageDesc ?? t('meta_desc');
 // SEO: absolute URLs for canonical / hreflang / Open Graph
 $ssmf_scheme = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
     || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https')) ? 'https' : 'http';
-$ssmf_host  = $_SERVER['HTTP_HOST'] ?? 'saintsylvester.vercel.app';
+$ssmf_host  = SITE_HOST !== '' ? SITE_HOST : ($_SERVER['HTTP_HOST'] ?? 'saintsylvester.vercel.app');
 $ssmf_base  = $ssmf_scheme . '://' . $ssmf_host;
 $ssmf_path  = strtok($_SERVER['REQUEST_URI'] ?? '/', '?');
 $ssmf_canon = $ssmf_base . $ssmf_path . '?lang=' . $lang;
@@ -85,6 +85,7 @@ $ssmf_ogloc = $lang === 'fr' ? 'fr_FR' : 'en_US';
     'telephone' => CLINIC_PHONE,
     'email' => CLINIC_EMAIL,
     'priceRange' => '$$',
+    'hasMap' => CLINIC_MAP_LINK,
     'address' => [
         '@type' => 'PostalAddress',
         'streetAddress' => 'BP 9026, Bonabéri',

@@ -34,6 +34,12 @@ define('CLINIC_ADDRESS_EN', 'P.O. Box 9026, Bonaberi, Douala, Cameroon');
 define('CLINIC_MAP_EMBED', 'https://maps.google.com/maps?q=Bonaberi%2C+Douala%2C+Cameroon&t=&z=14&ie=UTF8&iwloc=&output=embed');
 define('CLINIC_MAP_LINK', 'https://maps.google.com/?q=Bonaberi,+Douala,+Cameroon');
 
+// Canonical site host (no scheme), e.g. www.saintsylvester.cm. Once your paid
+// domain is live, set the SITE_HOST env var in Vercel so every SEO URL (canonical,
+// Open Graph, sitemap, robots) uses it and ranking consolidates on one domain.
+// Empty = use whatever host served the request.
+define('SITE_HOST', getenv('SITE_HOST') ?: '');
+
 // Booking rules
 define('BOOKING_DAYS_AHEAD', 21);     // how far in the future patients can book
 define('BOOKING_CUTOFF_HOURS', 2);    // same-day cutoff before slot time

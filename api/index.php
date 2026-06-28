@@ -17,6 +17,9 @@ $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
 $rel = ltrim(rawurldecode($uri ?? '/'), '/');
 if ($rel === '') $rel = 'index.php';
 
+// Serve the SEO files from host-aware PHP generators.
+$rel = ['sitemap.xml' => 'sitemap.php', 'robots.txt' => 'robots.php'][$rel] ?? $rel;
+
 $candidate = $root . '/' . $rel;
 // "/about" -> "/about.php",  "/admin/" -> "/admin/index.php"
 if (is_dir($candidate)) {

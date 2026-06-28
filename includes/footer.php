@@ -63,6 +63,24 @@
   <a class="mobile-bar-book" href="appointment.php"><?= icon('calendar') ?> <?= t('mb_book') ?></a>
 </div>
 
+<div class="cookie-bar" id="cookieBar" role="dialog" aria-live="polite" aria-label="<?= e(t('cookie_title')) ?>">
+  <p><?= t('cookie_text') ?></p>
+  <button type="button" class="btn btn-primary" id="cookieAccept"><?= t('cookie_accept') ?></button>
+</div>
+<script>
+(function () {
+  try {
+    var bar = document.getElementById('cookieBar');
+    if (!bar) return;
+    if (localStorage.getItem('ssmf_cookie_ok') !== '1') bar.classList.add('show');
+    document.getElementById('cookieAccept').addEventListener('click', function () {
+      try { localStorage.setItem('ssmf_cookie_ok', '1'); } catch (e) {}
+      bar.classList.remove('show');
+    });
+  } catch (e) {}
+})();
+</script>
+
 <script src="assets/js/main.js" defer></script>
 <?php if (!empty($extraScripts)) foreach ($extraScripts as $src) echo '<script src="' . e($src) . '" defer></script>' . PHP_EOL; ?>
 </body>
