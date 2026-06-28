@@ -93,6 +93,37 @@ try {
     json_out(['ok' => false, 'error' => t('err_generic')], 500);
 }
 
+// Email the clinic about the new booking (best-effort — never blocks the booking).
+if (defined('RESEND_API_KEY') && RESEND_API_KEY !== '') {
+    try {
+        $dq = db()->prepare("SELECT full_name FROM doctors WHERE id = ?");
+        $dq->execute([$doctorId]);
+        $docName = $dq->fetchColumn();
+        $sq = db()->prepare("SELECT name_en FROM services WHERE id = ?");
+        $sq->execute([$serviceId]);
+        $svcName = $sq->fetchColumn();
+        $who = $bookingFor === 'other' ? ($otherName . ' (booked by ' . $name . ')') : $name;
+        $info = [
+            'Reference'   => $reference,
+            'Patient'     => $who,
+            'Phone'       => $phone,
+            'Email'       => $email ?: '—',
+            'Doctor'      => $docName ?: '—',
+            'Service'     => $svcName ?: '—',
+            'Date & time' => $date . ' · ' . $time,
+            'Fee'         => $fee !== null ? money((int) $fee) : '—',
+            'Notes'       => $notes ?: '—',
+        ];
+        $html = '<h2 style="font-family:Arial,sans-serif">New appointment booking</h2>'
+              . '<table cellpadding="6" style="font-family:Arial,sans-serif;border-collapse:collapse">';
+        foreach ($info as $k => $v) {
+            $html .= '<tr><td style="color:#666">' . e($k) . '</td><td><strong>' . e($v) . '</strong></td></tr>';
+        }
+        $html .= '</table>';
+        send_email(BOOKING_NOTIFY_EMAIL, 'New booking ' . $reference . ' — ' . $who, $html);
+    } catch (Throwable $e) { /* notification is best-effort */ }
+}
+
 if ($needPay) {
     json_out(['ok' => true, 'reference' => $reference,
               'pay_url' => 'pay.php?ref=' . urlencode($reference) . '&t=' . $payToken]);

@@ -50,6 +50,11 @@ define('PAYMENT_HOLD_MINUTES', 20);   // unpaid bookings release their slot afte
 define('CONSULTATION_FEE', 10000);
 define('CONSULTATION_FEES', ['internal-medicine' => 15000]); // internist
 
+// ---- Email notifications (new bookings) ----
+define('BOOKING_NOTIFY_EMAIL', 'fmsaintsylvestre@gmail.com'); // where new bookings are sent
+define('MAIL_FROM', 'Saint Sylvester <onboarding@resend.dev>'); // change to a verified domain once set up
+define('RESEND_API_KEY', ''); // free key from resend.com — paste it here to switch emails on (see guide)
+
 // Fapshi (https://fapshi.com) — get these from your Fapshi dashboard before going live
 define('FAPSHI_BASE', 'https://live.fapshi.com'); // sandbox: https://sandbox.fapshi.com
 define('FAPSHI_API_USER', '');        // TODO

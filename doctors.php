@@ -10,7 +10,7 @@ $q = db()->query(
 );
 foreach ($q->fetchAll() as $r) $svcByDoc[$r['doctor_id']][] = lcol($r, 'name');
 
-page_banner(t('docs_title'), t('docs_sub'), t('nav_doctors'), 'assets/img/hero/slide-2.jpg');
+page_banner(t('docs_title'), t('docs_sub'), t('nav_doctors'), 'assets/img/hero/slide-3.jpg');
 ?>
 
 <section class="section">

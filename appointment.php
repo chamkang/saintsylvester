@@ -55,7 +55,7 @@ $bookingData = [
 ];
 ?>
 
-<?php page_banner(t('bk_title'), t('bk_sub'), t('nav_book'), 'assets/img/hero/slide-1.jpg'); ?>
+<?php page_banner(t('bk_title'), t('bk_sub'), t('nav_book'), 'assets/img/hero/slide-3.jpg'); ?>
 
 <section class="section" id="wizardTop" style="padding-top:42px">
   <div class="container wizard-layout">

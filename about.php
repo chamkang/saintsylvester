@@ -6,7 +6,7 @@ $founder = db()->query("SELECT * FROM doctors WHERE slug = 'dr-akwa-john'")->fet
 $founderPhoto = ($founder && $founder['photo'] && is_file(__DIR__ . '/' . $founder['photo']))
     ? $founder['photo'] : 'assets/img/team/doctor-1.jpg';
 
-page_banner(t('ab_title'), t('ab_sub'), t('nav_about'), 'assets/img/hero/slide-2.jpg');
+page_banner(t('ab_title'), t('ab_sub'), t('nav_about'), 'assets/img/hero/slide-3.jpg');
 ?>
 
 <section class="section">
