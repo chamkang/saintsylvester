@@ -685,6 +685,9 @@ body.menu-open { overflow: hidden; }
 
 /* ---------- booking wizard ---------- */
 .wizard-layout { display: grid; grid-template-columns: 1fr 330px; gap: 28px; align-items: start; }
+/* Let the columns shrink to the screen so the date strip scrolls inside its own
+   panel instead of pushing the page wider than the viewport (mobile overflow fix). */
+.wizard-layout > * { min-width: 0; }
 .wizard-steps { display: flex; margin-bottom: 30px; counter-reset: step; }
 .wstep { flex: 1; text-align: center; position: relative; }
 .wstep::before {
