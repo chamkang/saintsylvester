@@ -41,8 +41,9 @@ define('BOOKING_CUTOFF_HOURS', 2);    // same-day cutoff before slot time
 // ---- Payments (consultation fee, paid online before the visit) ----
 define('PAYMENT_ENABLED', true);
 // 'sandbox' = simulated payments for testing (no real money, works now).
-// 'fapshi'  = live MTN MoMo / Orange Money via Fapshi (needs the keys below + HTTPS).
-define('PAYMENT_PROVIDER', 'sandbox');
+// 'fapshi'  = live MTN MoMo / Orange Money via Fapshi (set the env vars below).
+// Set PAYMENT_PROVIDER=fapshi in the Vercel environment variables to go live.
+define('PAYMENT_PROVIDER', getenv('PAYMENT_PROVIDER') ?: 'sandbox');
 define('CONSULTATION_CURRENCY', 'FCFA');
 define('PAYMENT_HOLD_MINUTES', 20);   // unpaid bookings release their slot after this
 
@@ -53,11 +54,13 @@ define('CONSULTATION_FEES', ['internal-medicine' => 15000]); // internist
 // ---- Email notifications (new bookings) ----
 define('BOOKING_NOTIFY_EMAIL', 'fmsaintsylvestre@gmail.com'); // where new bookings are sent
 define('MAIL_FROM', 'Saint Sylvester <onboarding@resend.dev>'); // change to a verified domain once set up
-define('RESEND_API_KEY', ''); // free key from resend.com — paste it here to switch emails on (see guide)
+// SECRET — set in Vercel env vars, NOT here (this repo is public).
+define('RESEND_API_KEY', getenv('RESEND_API_KEY') ?: '');
 
-// Fapshi (https://fapshi.com) — get these from your Fapshi dashboard before going live
-define('FAPSHI_BASE', 'https://live.fapshi.com'); // sandbox: https://sandbox.fapshi.com
-define('FAPSHI_API_USER', '');        // TODO
-define('FAPSHI_API_KEY', '');         // TODO
+// Fapshi (https://fapshi.com) — MTN MoMo / Orange Money. Keys are SECRETS:
+// set them as Vercel environment variables, never in this (public) file.
+define('FAPSHI_BASE', getenv('FAPSHI_BASE') ?: 'https://live.fapshi.com'); // sandbox: https://sandbox.fapshi.com
+define('FAPSHI_API_USER', getenv('FAPSHI_API_USER') ?: '');
+define('FAPSHI_API_KEY', getenv('FAPSHI_API_KEY') ?: '');
 
 define('DEFAULT_LANG', 'fr');
