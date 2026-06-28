@@ -71,4 +71,4 @@ define('FAPSHI_BASE', getenv('FAPSHI_BASE') ?: 'https://live.fapshi.com'); // sa
 define('FAPSHI_API_USER', getenv('FAPSHI_API_USER') ?: '');
 define('FAPSHI_API_KEY', getenv('FAPSHI_API_KEY') ?: '');
 
-define('DEFAULT_LANG', 'fr');
+define('DEFAULT_LANG', 'en'); // first-time visitors see English; their toggle choice then persists
