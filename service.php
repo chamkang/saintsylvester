@@ -12,8 +12,14 @@ $pageDesc = lcol($svc, 'summary');
 require __DIR__ . '/includes/header.php';
 
 $docs = doctors_for_service((int)$svc['id']);
-$photo = 'assets/img/services/' . $svc['slug'] . '.jpg';
-if (!is_file(__DIR__ . '/' . $photo)) $photo = 'assets/img/hero/page-banner.jpg';
+// Fertility keeps its own photo; every other service uses the Services-page hero
+// image for both its banner and the in-page photo.
+if ($svc['slug'] === 'fertility') {
+    $photo = 'assets/img/services/fertility.jpg';
+    if (!is_file(__DIR__ . '/' . $photo)) $photo = 'assets/img/hero/page-banner.jpg';
+} else {
+    $photo = 'assets/img/hero/slide-3.jpg';
+}
 
 $paragraphs = array_filter(array_map('trim', explode("\n\n", (string)lcol($svc, 'body'))));
 if (!$paragraphs) $paragraphs = [lcol($svc, 'summary')];
