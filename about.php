@@ -2,10 +2,6 @@
 $page = 'about';
 require __DIR__ . '/includes/header.php';
 
-$founder = db()->query("SELECT * FROM doctors WHERE slug = 'dr-akwa-john'")->fetch();
-$founderPhoto = ($founder && $founder['photo'] && is_file(__DIR__ . '/' . $founder['photo']))
-    ? $founder['photo'] : 'assets/img/team/doctor-1.jpg';
-
 page_banner(t('ab_title'), t('ab_sub'), t('nav_about'), 'assets/img/hero/slide-3.jpg');
 ?>
 
@@ -14,8 +10,7 @@ page_banner(t('ab_title'), t('ab_sub'), t('nav_about'), 'assets/img/hero/slide-3
     <div class="collage reveal">
       <span class="orn-cross" aria-hidden="true"><i></i><i></i></span>
       <span class="collage-dots" aria-hidden="true"></span>
-      <figure class="collage-main" style="margin:0"><img src="assets/img/about/about-2.jpg" alt="<?= e(t('ab_title')) ?>" loading="lazy"></figure>
-      <figure class="collage-second" style="margin:0"><img src="assets/img/about/about-3.jpg" alt="" loading="lazy"></figure>
+      <figure class="collage-main" style="margin:0"><img src="assets/img/about/drip.jpg" alt="<?= e(t('ab_title')) ?>" loading="lazy"></figure>
       <div class="collage-badge">
         <strong><span data-count="<?= e(setting('stat_years')) ?>">0</span><em>+</em></strong>
         <span><?= t('ha_badge') ?></span>
@@ -44,7 +39,7 @@ page_banner(t('ab_title'), t('ab_sub'), t('nav_about'), 'assets/img/hero/slide-3
       <span class="founder-frame" aria-hidden="true"></span>
       <span class="collage-dots" aria-hidden="true"></span>
       <figure class="founder-photo" style="margin:0">
-        <img src="<?= e($founderPhoto) ?>" alt="Dr. Akwa John — <?= e(t('fd_role')) ?>" loading="lazy">
+        <div class="founder-initials" aria-hidden="true"><span><?= e(doctor_initials('Dr. Akwa John')) ?></span></div>
         <span class="founder-onmc"><?= icon('shield') ?> <?= t('onmc_label') ?> 4529</span>
       </figure>
       <div class="founder-badge">
