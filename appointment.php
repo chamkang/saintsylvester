@@ -3,13 +3,16 @@ $page = 'appointment';
 $extraScripts = ['assets/js/booking.js'];
 require __DIR__ . '/includes/header.php';
 
-$services = get_services();
+// Services not offered for online booking (handled in-clinic / via a consultation).
+$hideFromBooking = ['surgery', 'imaging', 'laboratory'];
+$services = array_values(array_filter(get_services(), fn($s) => !in_array($s['slug'], $hideFromBooking, true)));
 $doctors = db()->query("SELECT * FROM doctors WHERE is_active = 1 ORDER BY sort_order")->fetchAll();
 $links = db()->query("SELECT doctor_id, service_id FROM doctor_service")->fetchAll(PDO::FETCH_NUM);
 
 $jsServices = array_map(fn($s) => [
     'id' => (int)$s['id'], 'slug' => $s['slug'], 'name' => lcol($s, 'name'),
     'duration' => (int)$s['duration_min'], 'iconHtml' => service_icon($s['icon']),
+    'feeLabel' => money(consultation_fee_for($s['slug'])),
 ], $services);
 
 $jsDoctors = array_map(function ($d) {
@@ -121,7 +124,7 @@ $bookingData = [
       <?php if (PAYMENT_ENABLED && consultation_fee() > 0): ?>
       <div class="sum-fee">
         <span><?= t('bk_fee_label') ?></span>
-        <strong><?= e(money(consultation_fee())) ?></strong>
+        <strong id="sumFee"><?= e(money(consultation_fee())) ?></strong>
       </div>
       <p class="sum-fee-note"><?= icon('shield') ?> <?= t('bk_fee_note') ?></p>
       <?php endif; ?>

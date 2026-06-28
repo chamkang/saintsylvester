@@ -46,6 +46,10 @@ define('PAYMENT_PROVIDER', 'sandbox');
 define('CONSULTATION_CURRENCY', 'FCFA');
 define('PAYMENT_HOLD_MINUTES', 20);   // unpaid bookings release their slot after this
 
+// Consultation fee in FCFA: a fixed default, with per-service overrides by slug.
+define('CONSULTATION_FEE', 10000);
+define('CONSULTATION_FEES', ['internal-medicine' => 15000]); // internist
+
 // Fapshi (https://fapshi.com) — get these from your Fapshi dashboard before going live
 define('FAPSHI_BASE', 'https://live.fapshi.com'); // sandbox: https://sandbox.fapshi.com
 define('FAPSHI_API_USER', '');        // TODO

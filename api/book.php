@@ -38,9 +38,11 @@ if (!in_array($time, available_slots($doctorId, $date), true)) {
     json_out(['ok' => false, 'code' => 'slot_taken', 'error' => t('err_slot_taken')], 409);
 }
 
-$svc = db()->prepare("SELECT duration_min FROM services WHERE id = ?");
+$svc = db()->prepare("SELECT slug, duration_min FROM services WHERE id = ?");
 $svc->execute([$serviceId]);
-$duration = (int)($svc->fetch()['duration_min'] ?? 20);
+$svcRow = $svc->fetch();
+$duration = (int)($svcRow['duration_min'] ?? 20);
+$svcSlug = $svcRow['slug'] ?? null;
 
 // Link the booking to an existing patient file when possible:
 //   1) an explicit MRN entered (strongest signal), otherwise
@@ -63,8 +65,8 @@ if ($patientId === null && $bookingFor === 'self') {
 $startsAt = "$date $time:00";
 $endsAt = date('Y-m-d H:i:s', strtotime($startsAt) + $duration * 60);
 
-$needPay = PAYMENT_ENABLED && consultation_fee() > 0;
-$fee = $needPay ? consultation_fee() : null;
+$needPay = PAYMENT_ENABLED && consultation_fee_for($svcSlug) > 0;
+$fee = $needPay ? consultation_fee_for($svcSlug) : null;
 $payToken = $needPay ? bin2hex(random_bytes(16)) : null;
 
 $pdo = db();

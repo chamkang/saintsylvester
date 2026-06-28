@@ -44,15 +44,17 @@
     const counter = document.getElementById('slideNow');
     let cur = 0, timer = null;
 
-    slides.forEach((_, i) => {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.setAttribute('aria-label', 'Slide ' + (i + 1));
-      if (i === 0) b.classList.add('on');
-      b.addEventListener('click', () => { show(i); restart(); });
-      dotsBox.appendChild(b);
-    });
-    const dots = Array.from(dotsBox.children);
+    if (dotsBox) {
+      slides.forEach((_, i) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.setAttribute('aria-label', 'Slide ' + (i + 1));
+        if (i === 0) b.classList.add('on');
+        b.addEventListener('click', () => { show(i); restart(); });
+        dotsBox.appendChild(b);
+      });
+    }
+    const dots = dotsBox ? Array.from(dotsBox.children) : [];
 
     function show(i) {
       cur = (i + slides.length) % slides.length;

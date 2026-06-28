@@ -21,7 +21,7 @@ page_banner(t('docs_title'), t('docs_sub'), t('nav_doctors'), 'assets/img/hero/s
         <div class="doc-photo">
           <?= doctor_photo($d) ?>
           <div class="doc-overlay">
-            <a class="btn btn-primary" href="appointment.php"><?= t('doc_book') ?></a>
+            <a class="btn btn-primary" href="appointment.php?doctor=<?= (int)$d['id'] ?>"><?= t('doc_book') ?></a>
           </div>
         </div>
         <div class="doc-meta">
@@ -36,7 +36,7 @@ page_banner(t('docs_title'), t('docs_sub'), t('nav_doctors'), 'assets/img/hero/s
           <?php if (!empty($svcByDoc[$d['id']])): ?>
             <p class="doc-svcs"><?= e(implode(' · ', $svcByDoc[$d['id']])) ?></p>
           <?php endif; ?>
-          <a class="btn btn-primary doc-book-btn" href="appointment.php"><?= t('doc_book') ?> <?= icon('arrow') ?></a>
+          <a class="btn btn-primary doc-book-btn" href="appointment.php?doctor=<?= (int)$d['id'] ?>"><?= t('doc_book') ?> <?= icon('arrow') ?></a>
         </div>
       </article>
       <?php endforeach; ?>

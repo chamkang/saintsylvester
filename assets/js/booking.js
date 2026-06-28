@@ -5,7 +5,7 @@
   if (!D) return;
   const i18n = D.i18n;
 
-  const state = { step: 1, service: null, doctor: null, anyDoctor: false, date: null, time: null, slotDoctor: null };
+  const state = { step: 1, service: null, doctor: null, anyDoctor: false, date: null, time: null, slotDoctor: null, lockedDoctor: false };
 
   const panels = {
     1: document.getElementById('panel1'),
@@ -30,8 +30,14 @@
 
   /* ---------- rendering ---------- */
 
+  function servicesForBooking() {
+    if (!state.lockedDoctor) return D.services;
+    const ids = D.links.filter((l) => l[0] === state.doctor).map((l) => l[1]);
+    return D.services.filter((s) => ids.includes(s.id));
+  }
+
   function renderServices() {
-    panels[1].innerHTML = '<div class="pick-grid">' + D.services.map((s) =>
+    panels[1].innerHTML = '<div class="pick-grid">' + servicesForBooking().map((s) =>
       `<button type="button" class="pick-card${state.service === s.id ? ' selected' : ''}" data-svc="${s.id}">
          <span class="svc-chip">${s.iconHtml}</span>
          <span><strong>${esc(s.name)}</strong><small>${i18n.duration.replace('{min}', s.duration)}</small></span>
@@ -39,8 +45,9 @@
     panels[1].querySelectorAll('[data-svc]').forEach((b) =>
       b.addEventListener('click', () => {
         state.service = parseInt(b.dataset.svc, 10);
-        state.doctor = null; state.anyDoctor = false; state.date = null; state.time = null;
-        go(2);
+        if (!state.lockedDoctor) { state.doctor = null; state.anyDoctor = false; }
+        state.date = null; state.time = null;
+        go(state.lockedDoctor ? 3 : 2); // locked doctor → skip the doctor step
       }));
   }
 
@@ -162,6 +169,8 @@
 
   function updateSummary() {
     const svc = D.services.find((s) => s.id === state.service);
+    const feeEl = document.getElementById('sumFee');
+    if (feeEl && svc && svc.feeLabel) feeEl.textContent = svc.feeLabel;
     const doc = state.slotDoctor ? state.slotDoctor.name
       : state.anyDoctor ? i18n.anyDoctor
       : state.doctor ? (D.doctors.find((d) => d.id === state.doctor) || {}).name : null;
@@ -207,7 +216,11 @@
     document.getElementById('wizardTop').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  btnBack.addEventListener('click', () => go(Math.max(1, state.step - 1)));
+  btnBack.addEventListener('click', () => {
+    let prev = state.step - 1;
+    if (state.lockedDoctor && prev === 2) prev = 1; // the doctor step is skipped
+    go(Math.max(1, prev));
+  });
 
   btnNext.addEventListener('click', () => {
     if (state.step === 3) {
@@ -305,13 +318,29 @@
 
   /* ---------- init (with quick-book prefill) ---------- */
   const params = new URLSearchParams(location.search);
+
+  // Pre-selected doctor (from a doctor's "Book" button): lock it and skip the doctor step.
+  const preDoc = params.get('doctor');
+  if (preDoc) {
+    const doc = D.doctors.find((d) => String(d.id) === preDoc);
+    if (doc) {
+      state.doctor = doc.id;
+      state.lockedDoctor = true;
+      if (stepsEl[1]) stepsEl[1].style.display = 'none'; // hide the "Doctor" step indicator
+      const svcIds = D.links.filter((l) => l[0] === doc.id).map((l) => l[1]);
+      if (svcIds.length === 1) state.service = svcIds[0]; // one service → auto-pick it
+    }
+  }
+
   const preSvc = params.get('service');
-  if (preSvc) {
+  if (preSvc && !state.lockedDoctor) {
     const svc = D.services.find((s) => s.slug === preSvc || String(s.id) === preSvc);
     if (svc) state.service = svc.id;
   }
   const preDate = params.get('date');
   if (preDate && /^\d{4}-\d{2}-\d{2}$/.test(preDate)) state.date = preDate;
 
-  go(state.service ? 2 : 1);
+  // Locked doctor + a known service → jump straight to date; locked doctor alone →
+  // pick the service first (doctor step skipped); otherwise the normal flow.
+  go(state.service ? (state.lockedDoctor ? 3 : 2) : 1);
 })();

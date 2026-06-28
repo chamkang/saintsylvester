@@ -116,7 +116,12 @@ function sweep_expired_holds(): void {
 }
 
 function consultation_fee(): int {
-    return (int)setting('consultation_fee');
+    return CONSULTATION_FEE;
+}
+
+/** Fee for a specific service (by slug) — falls back to the fixed default. */
+function consultation_fee_for(?string $slug): int {
+    return CONSULTATION_FEES[$slug] ?? CONSULTATION_FEE;
 }
 
 function money(int $amount): string {

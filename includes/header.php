@@ -234,10 +234,7 @@ function doctor_initials(string $name): string {
  * assets/img/team/ and updating the doctors.photo column.
  */
 function doctor_photo(array $d): string {
-    $photo = trim((string)($d['photo'] ?? ''));
-    if ($photo !== '' && is_file(__DIR__ . '/../' . $photo)) {
-        return '<img src="' . e($photo) . '" alt="' . e($d['full_name']) . '" loading="lazy">';
-    }
+    // Clinic preference: show name initials for every doctor (no photos).
     return '<span class="doc-fallback"><span>' . e(doctor_initials($d['full_name'])) . '</span></span>';
 }
 ?>

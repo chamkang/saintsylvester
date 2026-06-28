@@ -70,7 +70,6 @@ function testi_letters(string $initials): string {
   </div>
 
   <div class="slide-count" aria-hidden="true"><em id="slideNow">01</em> <small>/ 03</small></div>
-  <div class="slider-dots" id="sliderDots" role="tablist" aria-label="Slides"></div>
   <div class="slider-arrows">
     <button type="button" id="slidePrev" aria-label="Previous slide"><?= icon('arrow-l') ?></button>
     <button type="button" id="slideNext" aria-label="Next slide"><?= icon('arrow') ?></button>
@@ -260,7 +259,7 @@ function testi_letters(string $initials): string {
         <div class="doc-photo">
           <?= doctor_photo($d) ?>
           <div class="doc-overlay">
-            <a class="btn btn-primary" href="appointment.php"><?= t('doc_book') ?></a>
+            <a class="btn btn-primary" href="appointment.php?doctor=<?= (int)$d['id'] ?>"><?= t('doc_book') ?></a>
           </div>
         </div>
         <div class="doc-meta">
